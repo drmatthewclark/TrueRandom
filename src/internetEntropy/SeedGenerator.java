@@ -14,7 +14,8 @@ import java.util.TimerTask;
 import prng.DigestRandom;
 import prng.MultiRandom;
 /**
- * class to generate random seeds
+ * class to generate random seeds using hardware random sources, and internet
+ * sources.
  * 
  *      copyright 2019 Matthew Clark
  
@@ -112,7 +113,8 @@ public class SeedGenerator  {
 
 		/*
 		 * get some entropy from process state.  This is pretty weak entropy
-		 * since it is likely to be similar on different computers.
+		 * since it is likely to be similar on different computers. However it 
+		 * provides a measure of extra data.
 		 */
 		final ThreadMXBean threadMXBean = 
 				(ThreadMXBean) ManagementFactory.getThreadMXBean();
@@ -125,7 +127,9 @@ public class SeedGenerator  {
 					beanMethod.setAccessible(true);
 					final Object item = beanMethod.invoke(runtimeMXBean, (Object[])null);
 					result.write(item.hashCode());
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -135,7 +139,9 @@ public class SeedGenerator  {
 					beanMethod.setAccessible(true);
 					final Object item  = beanMethod.invoke(threadMXBean, (Object[])null);
 					result.write(item.hashCode());
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -186,6 +192,7 @@ public class SeedGenerator  {
 
 		       } catch (Exception ex) {
 		           System.err.println("error running thread " + ex.getMessage());
+		           ex.printStackTrace();
 		       }
 		    }
 		}

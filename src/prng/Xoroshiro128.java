@@ -86,7 +86,9 @@ public class Xoroshiro128 extends ExtendedRandom {
    
     
     /**
-     * Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.
+     * Sets the seed of this generator using one long, running that through LightRNG's 
+     * algorithm twice to get the state. Filled with 'magic numbers'.
+     * 
      * @param seed the number to use as the seed
      */
     public void setSeed(final long seed) {

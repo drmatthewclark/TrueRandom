@@ -75,9 +75,9 @@ public class CBRNG extends ExtendedRandom {
 			random.nextBytes(seed);
 			cipher = getCipher(Cipher.ENCRYPT_MODE, seed, iv);
 			
-		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
-				| InvalidAlgorithmParameterException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(410);
 		}
 	}
 	
@@ -94,7 +94,7 @@ public class CBRNG extends ExtendedRandom {
 			cipher = getCipher(Cipher.ENCRYPT_MODE, seed, initializationVector);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(442);
+			System.exit(420);
 		}
 	}
 	
@@ -126,9 +126,14 @@ public class CBRNG extends ExtendedRandom {
 	void setSeed(byte[] newSeed) {
 		
 		// because of poor implementations Sun java calls this from the root Random class and it
-		// gets exectued before this class is initialized
-		if (seed == null) seed = new byte[KEYLEN];;
+		// gets executed before this class is initialized
+		if (seed == null) seed = new byte[KEYLEN];
 		
+		// use the LCG random to create a new initialization vector.
+		final Random random = new Random(bytesToLong(newSeed));
+		random.nextBytes(initializationVector);
+		
+		// copy the new seed 
 		System.arraycopy(newSeed, 0, seed, 0, Math.min(seed.length, newSeed.length));
 		
 		try {
@@ -137,6 +142,7 @@ public class CBRNG extends ExtendedRandom {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(425);
 		} 
 	}
 
@@ -159,7 +165,7 @@ public class CBRNG extends ExtendedRandom {
 			result = cipher.doFinal();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(10);
+			System.exit(430);
 		} 
 		
 		return (int) (bytesToLong(result) >> (64 - bits));

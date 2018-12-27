@@ -189,17 +189,25 @@ public abstract class ExtendedRandom extends Random {
 	 * @return integer
 	 * 
 	 */
-	public final int bytesToInt(final byte[] bytes) {
+	public static final int bytesToInt(final byte[] bytes) {
+		
 		assert (bytes.length > 3);
-		return bytes[0] << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
+		
+		return	(bytes[0] & 0xFF) << 24 |
+				(bytes[1] & 0xFF) << 16 |
+				(bytes[2] & 0xFF) << 8  | 
+				(bytes[3] & 0xFF);
 	}
 	
 	
 	/**
 	 * create a long from a byte array for random methods that use only
-	 * a long value seed.
+	 * a long value seed.  This does not actually return the Long value
+	 * that corresponds to the bytes as it also treats the case where the
+	 * array is longer than 8 bytes.
+	 * 
 	 * @param seed byte array
-	 * @return long value computed from byte array.
+	 * @return a long value computed from byte array.
 	 * 
 	 */
 	final static long bytesToLong(byte[] seed) {

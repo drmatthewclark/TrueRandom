@@ -104,9 +104,11 @@ public class DigestRandom extends ExtendedRandom {
 	
 	
 	/**
-	 * provides the next bytes from the random stream. 
+	 * provides the next bytes from the random stream. It returns an int with
+	 * a byte value.
 	 * 
 	 * @param bytes byte array to be filled with bytes
+	 * @return integer with only first 8 bits set.
 	 */
 	private final int nextByte() {
 		
@@ -118,7 +120,7 @@ public class DigestRandom extends ExtendedRandom {
 			updateState();
 		}
 	
-		return state[index++];
+		return state[index++] & 0xFF;
 
 	}
 	
@@ -130,8 +132,10 @@ public class DigestRandom extends ExtendedRandom {
 	 */
 	protected synchronized final int next(int bits) {
 		
-		final int val =   nextByte() << 24 | (nextByte() ) << 16 
-				| (nextByte() ) << 8 | (nextByte() );
+		final int val =	nextByte() << 24 | 
+						nextByte() << 16 |
+						nextByte() << 8  |
+						nextByte();
 		
 		return val >>> (32 - bits);
 	}
