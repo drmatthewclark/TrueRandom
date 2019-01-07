@@ -40,7 +40,7 @@ public class Random64 extends ExtendedRandom {
 	protected synchronized final int next(int bits) {
 
 		seed = seed * multiplier + addend;
-		return (int) (seed >>> (64 - bits));
+		return (int) (seed >>> (48 - bits));
 	}
 
 }
